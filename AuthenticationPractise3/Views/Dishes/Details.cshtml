@@ -1,0 +1,66 @@
+﻿@model ReadyToLunch.Model.Models.Dish
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Dish</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.CategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category.CategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DishName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DishName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DishDisc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DishDisc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Spicy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Spicy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isMuslim)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isMuslim)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isGlutenFree)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isGlutenFree)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.DishID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

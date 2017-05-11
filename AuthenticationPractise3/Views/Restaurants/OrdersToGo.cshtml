@@ -1,0 +1,134 @@
+﻿@model IEnumerable<ReadyToLunch.Model.Models.Order>
+
+@{
+    ViewBag.Title = "OrdersToGo";
+}
+
+<script src="~/Scripts/jquery-3.1.1.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<link href="~/Content/MyStyle.css" rel="stylesheet" />
+
+<script>
+    $(document).ready();
+    function CheckBoxChange(OrderID) {
+        var id = "#ShippedCheckBox_" + OrderID;
+        var checked = false;
+        if ($(id).is(":checked")) {
+            checked = true;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:57450/api/OrdersRecord/OrderShipped/' + OrderID + "?OrderID=" + OrderID + "&Checked=" +  checked,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(OrderID, checked),
+            error: function (msg) {
+                alert(msg.responseText);
+            }
+        })
+    }
+
+    var subTableFlag = false;
+
+    function SubTable(OrderID) {
+        var id = "#RestaurantSubTable_" + OrderID;
+        var servicUrl = 'http://localhost:57450/api/OrdersRecord/GetDishesOrderID/' + OrderID;
+        if(subTableFlag === false){
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: servicUrl,
+                data: JSON.stringify(OrderID),
+                success: function (data) {
+                    //var tr = $(id);
+                    //var index = tr.rowIndex;
+                    //alert("working");
+                    var tr;
+                    for (var i = 0; i < data.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td>" + data[i].DishName + "</td>");
+                        tr.append("<td>" + data[i].RestaurantName + "</td>");
+                        tr.append("<td>" + data[i].Quantity + "</td>");
+                        tr.append("<td>" + data[i].TotalPrice + "</td>");
+                        tr.attr('class', "subTableRow_" + OrderID);
+                        tr.addClass("active");
+                        $(id).after(tr);
+                    }
+                },
+                error: function (msg) {
+                    alert(msg.responseText);
+                }
+            });
+            subTableFlag = true;
+        }
+
+        else if(subTableFlag === true){
+            var classToDelete = ".subTableRow_" + OrderID
+            $(classToDelete).remove();
+            subTableFlag = false;
+        }
+    }
+    
+    function HighLight(OrderID) {
+        id = "#RestaurantSubTable_" + OrderID;
+        $(id).addClass("success");
+    }
+
+    function DeHighLight(OrderID){
+        id = "#RestaurantSubTable_" + OrderID;
+        $(id).removeClass("success");
+    }
+</script>
+
+<h2>OrdersToGo</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer.FullAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalPrice)
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Shipped)*@
+            Shipped
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Delivered)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr id="RestaurantSubTable_@Html.Raw(item.OrderID)" onclick="SubTable(@item.OrderID)" onmouseover="HighLight(@item.OrderID)" onmouseout="DeHighLight(@item.OrderID)" >
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.FullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.FullAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalPrice)
+        </td>
+        <td>
+            <input type="checkbox" id="ShippedCheckBox_@Html.Raw(item.OrderID)" onclick="CheckBoxChange(@item.OrderID)" checked="@item.Shipped">
+            @*@Html.CheckBoxFor(modelItem => item.Shipped, new { id = "ShippedCheckbox_" + item.OrderID, @onclick = "CheckBoxChange()" })*@
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Delivered)
+        </td>
+    </tr>
+}
+
+</table>

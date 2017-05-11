@@ -1,0 +1,197 @@
+﻿@model ReadyToLunch.Data.ViewModels.RestaurantIndexData
+@{
+    ViewBag.Title = "Restaurants";
+}
+
+
+
+<h2>Restaurants</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Restaurant Name
+        </th>        
+        <th>
+            Cuisine Type
+        </th>
+        <th>
+            Rate
+        </th>
+        <th>
+            Address
+        </th>
+        
+        <th>
+            Manager
+        </th>
+        <th>
+            Telephone
+        </th>
+        <th>
+            Email
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Restaurants) {
+    string selectedRow = "";
+    if (item.ID == ViewBag.ResturantID)
+    {
+        selectedRow = "success";
+    }
+    <tr class="@selectedRow">
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Category.CategoryName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Stars)
+        </td>    
+        <td>
+            @Html.DisplayFor(modelItem => item.FullAddress)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.FullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Telephone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+
+        <td>
+            @Html.ActionLink("Details", "Details", new { id=item.ID })
+            @Html.ActionLink("Order Online", "Index", new { id = item.ID})
+        </td>
+
+    </tr>
+}
+
+</table>
+
+@if (Model.Dishes != null)
+{
+    <h3>Menu of The Restaurant</h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>
+                Name
+            </th>
+            <th>
+                Spicy
+            </th>
+            <th>
+                Muslim
+            </th>
+            <th>
+                GlutenFree
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Dishes)
+        {
+            string selectedRow = "";
+            if (item.DishID == ViewBag.DishID)
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.ActionLink("Add", "Index", new { DishID = item.DishID, changeNumber = 0})
+                </td>
+                <td>
+                    @item.DishName
+                </td>
+                <td>
+                    @item.Spicy
+                </td>
+                <td>
+                    @item.isMuslim
+                </td>
+                <td>
+                    @item.isGlutenFree
+                </td>
+                <td>
+                    @item.DishDisc
+                </td>
+                <td>
+                    @item.Price
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+
+@if (Model.Cart.FirstOrDefault() != null)
+{
+    <h3>
+        Your Lunch:
+    </h3>
+    <table class="table">
+        <tr>
+            <th>Dish</th>
+            <th>Restaurant</th>
+            <th>Number</th>
+            <th>Total Price</th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.Cart)
+        {
+            <tr>
+                <td>
+                    @item.Dish.DishName
+                </td>
+                <td>
+                    @item.Restaurant.UserName
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.DishAmount)*@
+                    @Html.ActionLink("REMOVE", "Index", new { DishID = item.DishID, changeNumber = 1, id = item.RestaurantID })
+                    @item.DishAmount
+                    @Html.ActionLink("ADD", "Index", new { DishID = item.DishID, changeNumber = 0, id = item.RestaurantID })
+                </td>
+                <td>
+                    @item.TotalPrice
+                </td>
+                <td>
+                    @Html.ActionLink("Cancel", "Index", new { DishID = item.DishID, changeNumber = 2, id = item.RestaurantID })
+                </td>
+            </tr>
+        }
+    </table>
+}
+@if (Model.Cart.FirstOrDefault() != null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+
+            </div>
+            <div class="col-lg-4">
+                <input type="button" id="Purchase" value="Order" class="btn btn-default pull-right" onclick="location.href='@Url.Action("Create", "User")'"/>
+            </div>
+        </div>
+    </div>
+}
+
+
+@*else
+{
+    Model.Orders.
+}*@

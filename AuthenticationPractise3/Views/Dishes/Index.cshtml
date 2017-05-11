@@ -1,0 +1,55 @@
+﻿@model IEnumerable<ReadyToLunch.Model.Models.Dish>
+
+@{
+    ViewBag.Title = "Menu";
+}
+
+<h2>Menu</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DishName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DishDisc)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Spicy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.isMuslim)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.isGlutenFree)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DishName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DishDisc)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Spicy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.isMuslim)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.isGlutenFree)
+        </td>
+        <td>
+            @Html.ActionLink("Add to List", "Add", new { id=item.DishID })
+        </td>
+    </tr>
+}
+
+</table>

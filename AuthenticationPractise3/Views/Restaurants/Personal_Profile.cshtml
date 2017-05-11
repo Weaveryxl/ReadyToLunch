@@ -1,0 +1,97 @@
+﻿@model ReadyToLunch.Data.ViewModels.RestaurantIndexData
+
+@{
+    ViewBag.Title = "Personal_Profile";
+}
+
+<h2>Personal_Profile</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h4>Restaurant</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().UserName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().UserName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().RestaurantDescrip)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().RestaurantDescrip)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().FullAddress)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().FullAddress)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().Stars)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().Stars)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().Telephone)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().Telephone)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().Website)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().Website)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().Email)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().Email)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().RegisterDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().RegisterDate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().VIP)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().VIP)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-lg-6">
+            
+        </div>
+    </div>
+</div>
+<div>
+    
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Restaurants.Single().ID })
+</p>

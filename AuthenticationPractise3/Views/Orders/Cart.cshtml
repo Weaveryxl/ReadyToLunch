@@ -1,0 +1,200 @@
+﻿@model IEnumerable<ReadyToLunch.Model.Models.CartItem>
+
+@{
+    ViewBag.Title = "Cart";
+}
+
+<script src="~/Scripts/jquery-3.1.1.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<link href="~/Content/MyStyle.css" rel="stylesheet" />
+<script src="~/Scripts/DishScripts.js"></script>
+
+<script>
+    $(document).ready();
+    function DeleteRow() {
+        $(".delete").on("click", function () {
+            var tr = $(this).closest('tr');
+            tr.remove();
+        });
+    }
+
+    function AddDish(ID, dishID, changenumber, restaurantID, singlePrice) {
+        var id = "#DishAmount_" + ID;
+        var Quantity = $(id).text();
+        $(id).text(parseInt(Quantity) + 1);
+
+        var totalPriceId = "#TotalPrice_" + ID;
+        var TotalPrice = $(totalPriceId).text();
+
+        $(totalPriceId).text((parseFloat(TotalPrice) + parseFloat(singlePrice)).toFixed(2));
+
+        var OldTotal = $("#Total_All").text();
+        var TotalAll = $("#Total_All").text((parseFloat(OldTotal) + parseFloat(singlePrice)).toFixed(2));
+
+        var cartItem = {
+            DishID: dishID,
+            ChangeNumber: changenumber,
+            RestaurantID: restaurantID
+        };
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //dataType: "json", // since the method called doesn't return anything, so don't set dataType
+            //url: '@Url.Action("UpdateCart", "Customers")', razor engine is not working here
+            url: "http://localhost:57450/Customers/UpdateCart",
+            data: JSON.stringify(cartItem),
+        });
+    }
+
+    function MinDish(ID, dishID, changenumber, restaurantID, singlePrice) {
+        var id = "#DishAmount_" + ID;
+        var Quantity = $(id).text();
+
+        var totalPriceId = "#TotalPrice_" + ID;
+        var TotalPrice = $(totalPriceId).text();
+
+
+        if (Quantity > 1) {
+            $(id).text(parseInt(Quantity) - 1);
+            $(totalPriceId).text((parseFloat(TotalPrice) - parseFloat(singlePrice)).toFixed(2));
+        }
+        else {
+            var rowId = "#cartItem_" + ID;
+            var tr = $(rowId).closest('tr');
+            tr.remove();
+        }
+
+        var OldTotal = $("#Total_All").text();
+        var TotalAll = $("#Total_All").text((parseFloat(OldTotal) - parseFloat(singlePrice)).toFixed(2));
+
+        var cartItem = {
+            DishID: dishID,
+            ChangeNumber: changenumber,
+            RestaurantID: restaurantID
+        }
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //dataType: "json", // since the method called doesn't return anything, so don't set dataType
+            url: "http://localhost:57450/Customers/UpdateCart",
+            data: JSON.stringify(cartItem),
+        });
+        
+    }
+
+    function CancelDish(ID, dishID, changenumber, restaurantID) {
+        var id = "#DishAmount_" + ID;
+        var Quantity = $(id).text();
+
+        var totalPriceId = "#TotalPrice_" + ID;
+        var TotalPrice = $(totalPriceId).text();
+
+        var rowId = "#cartItem_" + ID;
+        var tr = $(rowId).closest('tr');
+        tr.remove();
+
+        var cartItem = {
+            DishID: dishID,
+            ChangeNumber: changenumber,
+            RestaurantID: restaurantID
+        }
+
+        var OldTotal = $("#Total_All").text();
+        var TotalAll = $("#Total_All").text((parseFloat(OldTotal) - parseFloat(TotalPrice)).toFixed(2));
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            //dataType: "json", // since the method called doesn't return anything, so don't set dataType
+            url: "http://localhost:57450/Customers/UpdateCart",
+            data: JSON.stringify(cartItem),
+        });
+    }
+</script>
+
+<h2>Cart</h2>
+
+@if (Model.FirstOrDefault() == null)
+{
+    <h2>
+        There's no item in your cart ~~
+    </h2>
+}
+
+@if (Model.FirstOrDefault() != null)
+{
+    <h3 id="YourCart">
+        Your Order:
+    </h3>
+    <table class="table">
+        <tr>
+            <th>Dish</th>
+            <th>Restaurant</th>
+            <th>Number</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr id="cartItem_@Html.Raw(item.ID)">
+                <td>
+                    @item.Dish.DishName
+                </td>
+                <td>
+                    @item.Restaurant.UserName
+                </td>
+                <td>
+                    <button type="button" class="btn btn-default btn-circle" onclick="MinDish(@item.ID, @item.DishID, 1, @item.RestaurantID, @item.Dish.Price)"><i class="glyphicon glyphicon-minus"></i> </button>
+                    <label id="DishAmount_@Html.Raw(item.ID)">@item.DishAmount</label>
+                    <button type="button" class="btn btn-default btn-circle" onclick="AddDish(@item.ID, @item.DishID, 0, @item.RestaurantID, @item.Dish.Price)"><i class="glyphicon glyphicon-plus"></i> </button>
+                </td>
+                <td>
+                    $<label id="TotalPrice_@Html.Raw(item.ID)">@item.TotalPrice</label>
+                </td>
+                <td>
+                    <button id="Cancel_@Html.Raw(item.ID)" type="button" class="btn btn-danger btn-circle" onclick="CancelDish(@item.ID, @item.DishID, 2, @item.RestaurantID)"><i class="glyphicon glyphicon-remove"></i></button>
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@if (Model.FirstOrDefault() != null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+
+            </div>
+            <div class="col-lg-4">
+                <h3 class="pull-right">
+                    @{double amount = 0; }
+                    @foreach (var cartItem in Model)
+                    {
+                        amount += cartItem.TotalPrice;
+                    }
+                    <label>Total: $</label>
+                    <label id="Total_All">@amount </label>
+                </h3>
+            </div>
+        </div>
+    </div>
+
+                        }
+
+@if (Model.FirstOrDefault() != null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+
+            </div>
+            <div class="col-lg-4">
+                <input type="button" id="PlaceOrder" value="Place Your Order" class="btn btn-default pull-right" onclick="location.href='@Url.Action("PlaceOrder", "Orders")'" />
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,153 @@
+﻿@model ReadyToLunch.Data.ViewModels.RestaurantIndexData
+
+@{
+    ViewBag.Title = "MyRestaurant";
+}
+
+<h2>My Restaurant</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <h4>
+                General Information
+            </h4>
+            
+
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().UserName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().UserName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().RestaurantDescrip)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().RestaurantDescrip)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().FullAddress)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().FullAddress)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().Stars)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().Stars)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().Telephone)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().Telephone)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().Website)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().Website)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().Email)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().Email)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().RegisterDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().RegisterDate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Restaurants.Single().VIP)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Restaurants.Single().VIP)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-lg-6">
+            <h4>Menu</h4>
+            <hr />
+            <table class="table">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Spicy
+                    </th>
+                    <th>
+                        Muslim
+                    </th>
+                    <th>
+                        GlutenFree
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                </tr>
+
+                @foreach (var item in Model.Dishes)
+                {
+                    string selectedRow = "";
+                    if (item.DishID == ViewBag.DishID)
+                    {
+                        selectedRow = "success";
+                    }
+                    <tr class="@selectedRow">
+
+                        <td>
+                            @item.DishName
+                        </td>
+                        <td>
+                            @item.Spicy
+                        </td>
+                        <td>
+                            @item.isMuslim
+                        </td>
+                        <td>
+                            @item.isGlutenFree
+                        </td>
+                        <td>
+                            @item.DishDisc
+                        </td>
+                        <td>
+                            $@item.Price
+                        </td>
+                    </tr>
+                }
+            </table>
+            @Html.ActionLink("Add Dish", "Create", "Dishes")
+        </div>
+    </div>
+</div>
+<div>
+
+</div>
