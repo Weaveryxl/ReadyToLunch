@@ -46,6 +46,7 @@
                     //var index = tr.rowIndex;
                     //alert("working");
                     var tr;
+                    
                     for (var i = 0; i < data.length; i++) {
                         tr = $('<tr/>');
                         tr.append("<td>" + data[i].DishName + "</td>");
@@ -56,6 +57,16 @@
                         tr.addClass("active");
                         $(id).after(tr);
                     }
+
+                    var tr_header;
+                    tr_header = $('<tr/>');
+                    tr_header.append("<th>" + "Dish Name" + "</th>");
+                    tr_header.append("<th>" + "Restaurant Name" + "</th>");
+                    tr_header.append("<th>" + "Quantity" + "</th>");
+                    tr_header.append("<th>" + "TotalPrice" + "</th>");
+                    tr_header.attr('class', "subTableHeader_" + OrderID);
+                    tr_header.addClass("active");
+                    $(id).after(tr_header);
                 },
                 error: function (msg) {
                     alert(msg.responseText);
@@ -66,7 +77,10 @@
 
         else if(subTableFlag === true){
             var classToDelete = ".subTableRow_" + OrderID
+            var headerToDelete = ".subTableHeader_" + OrderID
             $(classToDelete).remove();
+            $(headerToDelete).remove();
+
             subTableFlag = false;
         }
     }
